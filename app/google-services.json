@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "10953202761",
+    "project_id": "trackmylocation-db441",
+    "storage_bucket": "trackmylocation-db441.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10953202761:android:453d90daafedfdc9977398",
+        "android_client_info": {
+          "package_name": "net.tafri.trackmylocation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "10953202761-ckjpcod4k69c7divoibh24tpbal3uj45.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.tafri.trackmylocation",
+            "certificate_hash": "02f17470592e99b3abaa7d58434f18b294c148c6"
+          }
+        },
+        {
+          "client_id": "10953202761-5p19alrat915d59cdkkujptii0lprh20.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVWPkEyWcjSPyIr1MFm3vKlmlFOQ4C5gA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "10953202761-5p19alrat915d59cdkkujptii0lprh20.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
