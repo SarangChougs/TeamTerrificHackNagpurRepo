@@ -34,9 +34,9 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *  maps activity for driver
+ *  maps activity
  * */
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class UserMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LocationManager locationManager;
@@ -49,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.activity_driver_maps);
         requestId = GlobalClass.RequestedUserId;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -60,18 +60,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void setDriverCoordinates() {
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    if (flag == 0)
-                        return;
-                    flag = 0;
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
+        FirebaseDatabase.getInstance().getReference("Requests/" + requestId + "/driverCoordinates").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("latitude").getValue() != null && snapshot.child("longitude").getValue() != null)
+                    Toast.makeText(UserMapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                else{
+                    Toast.makeText(UserMapsActivity.this, "Location not fetched", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                double latitude = Double.parseDouble(snapshot.child("latitude").getValue().toString());
+                double longitude = Double.parseDouble(snapshot.child("longitude").getValue().toString());
+                if (ActivityCompat.checkSelfPermission(UserMapsActivity.this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)
+                        == PackageManager.PERMISSION_GRANTED) {
                     //get the location name from latitude and longitude
                     Geocoder geocoder = new Geocoder(getApplicationContext());
                     try {
@@ -81,7 +83,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         result += addresses.get(0).getCountryName();
                         LatLng latLng = new LatLng(latitude, longitude);
                         if (driverMarker != null) {
-                            driverMarker.remove();
                             driverMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(result));
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
@@ -90,57 +91,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21.0f));
                         }
-                        HashMap<String, Double> map = new HashMap<>();
-                        map.put("latitude", latitude);
-                        map.put("longitude", longitude);
-                        FirebaseDatabase.getInstance().getReference("Requests/" + requestId + "/driverCoordinates").setValue(map).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                setDelay(5000);
-                            }
-                        });
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 }
+            }
 
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            };
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        } else {
-            ActivityCompat.requestPermissions(MapsActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-        }
+            }
+        });
     }
 
     public void setUserCoordinates(){
-        FirebaseDatabase.getInstance().getReference("Requests/" + requestId + "/userCoordinates").addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Requests/" + requestId + "/userCoordinates").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.child("latitude").getValue() != null && snapshot.child("longitude").getValue() != null)
-                    Toast.makeText(MapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserMapsActivity.this, "Location updated", Toast.LENGTH_SHORT).show();
                 else{
-                    Toast.makeText(MapsActivity.this, "Location not fetched", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(UserMapsActivity.this, "Location not fetched", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 double latitude = Double.parseDouble(snapshot.child("latitude").getValue().toString());
                 double longitude = Double.parseDouble(snapshot.child("longitude").getValue().toString());
-                if (ActivityCompat.checkSelfPermission(MapsActivity.this,
+                if (ActivityCompat.checkSelfPermission(UserMapsActivity.this,
                         Manifest.permission.ACCESS_FINE_LOCATION)
                         == PackageManager.PERMISSION_GRANTED) {
                     //get the location name from latitude and longitude
@@ -165,6 +143,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                     locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                } else {
+                    ActivityCompat.requestPermissions(UserMapsActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            REQUEST_LOCATION_PERMISSION);
                 }
             }
 
@@ -177,7 +159,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        setDriverCoordinates();
+        setUserCoordinates();
     }
 
     @Override

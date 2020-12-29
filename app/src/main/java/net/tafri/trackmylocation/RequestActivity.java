@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,7 +19,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 
@@ -31,6 +35,7 @@ public class RequestActivity extends AppCompatActivity {
     LocationListener locationListener;
     int flag = 1;
     Button requestBtn;
+    int listenerAttached = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +95,10 @@ public class RequestActivity extends AppCompatActivity {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        if (listenerAttached == 0) {
+                                            listenerAttached = 1;
+                                            attachListeners();
+                                        }
                                         setDelay(5000);
                                     } else {
                                         System.out.println("User Location Update Failed");
@@ -129,6 +138,24 @@ public class RequestActivity extends AppCompatActivity {
 
     public void attachListeners() {
         //method to check status of user request
+        FirebaseDatabase.getInstance().getReference("Requests/" + GlobalClass.user.getUid() + "/status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() != null) {
+                    String status;
+                    status = snapshot.getValue().toString();
+                    if (status.equals("Accepted")) {
+                        GlobalClass.RequestedUserId = GlobalClass.user.getUid();
+                        startActivity(new Intent(getApplicationContext(), DriverMapsActivity.class));
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void setDelay(int delay) {

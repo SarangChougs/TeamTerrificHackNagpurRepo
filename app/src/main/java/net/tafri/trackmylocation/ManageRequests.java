@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -134,7 +133,7 @@ public class ManageRequests extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("Requests/" + request.getUserId() + "/status").setValue("Accepted");
         FirebaseDatabase.getInstance().getReference("Requests/" + request.getUserId() + "/driverInfo").setValue(map);
         //Open Maps Activity
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        startActivity(new Intent(getApplicationContext(), DriverMapsActivity.class));
         finish();
     }
 }
