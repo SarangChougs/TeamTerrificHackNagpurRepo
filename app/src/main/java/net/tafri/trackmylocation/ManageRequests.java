@@ -37,7 +37,6 @@ public class ManageRequests extends AppCompatActivity {
         mRecyclerView = findViewById(R.id.recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         mRequests = new ArrayList<>();
         mAdapter = new RequestAdapter(this, mRequests);
         mRecyclerView.setAdapter(mAdapter);
@@ -54,6 +53,11 @@ public class ManageRequests extends AppCompatActivity {
                     if (!requestSnapshot.child("status").getValue().toString().equals("Requested")) {
                         continue;
                     }
+                    double userLatitude = Double.parseDouble(requestSnapshot.child("userCoordinates").child("latitude").getValue().toString());
+                    double userLongitude = Double.parseDouble(requestSnapshot.child("userCoordinates").child("longitude").getValue().toString());
+                    double distance = distance(userLatitude, userLongitude, GlobalClass.currentUserLatitude, GlobalClass.currentUserLongitude);
+                    if (distance >= 10)
+                        continue;
                     flag = false;
                     Request request = new Request();
                     request.setUsername(requestSnapshot.child("username").getValue().toString());
@@ -136,5 +140,38 @@ public class ManageRequests extends AppCompatActivity {
         //Open Maps Activity
         startActivity(new Intent(getApplicationContext(), DriverMapsActivity.class));
         finish();
+    }
+
+    private double distance(double lat1, double long1, double lat2, double long2) {
+        // Calculate longitude difference
+        double longDiff;
+        if (long1 > long2)
+            longDiff = long1 - long2;
+        else
+            longDiff = long2 - long1;
+
+        //Calculate distance
+        double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(longDiff));
+
+        dist = Math.acos(dist);
+
+        //Convert distance rad to degree
+        dist = rad2deg(dist);
+
+        //distance in km
+        dist = dist * 60 * 1.1515 * 1.6094344;
+
+        return dist;
+
+    }
+
+    //convert degree to radian
+    private static double deg2rad(double lat1) {
+        return (lat1 * Math.PI / 180.0);
+    }
+
+    //convert degree to radian
+    private static double rad2deg(double distance) {
+        return (distance * 180.0 / Math.PI);
     }
 }

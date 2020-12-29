@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -150,6 +151,9 @@ public class RequestActivity extends AppCompatActivity {
                         GlobalClass.RequestedUserId = GlobalClass.user.getUid();
                         startActivity(new Intent(getApplicationContext(), UserMapsActivity.class));
                         finish();
+                    } else {
+                        TextView textView = findViewById(R.id.status);
+                        textView.setText("Waiting for request approval, once approved by a driver you'll be redirected...");
                     }
                 }
             }

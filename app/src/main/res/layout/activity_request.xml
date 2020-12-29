@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_margin="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:background="@drawable/round_btn"
         android:drawableLeft="@drawable/call_vector"
         android:elevation="8dp"
@@ -22,5 +23,17 @@
         android:padding="16dp"
         android:text="Request"
         android:textColor="#fff" />
+
+    <TextView
+        android:id="@+id/status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:fontFamily="@font/baloo"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@id/request"/>
 
 </RelativeLayout>
