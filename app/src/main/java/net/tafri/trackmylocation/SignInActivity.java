@@ -7,6 +7,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -53,7 +54,7 @@ public class SignInActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Object mBinding;
     private int flag = 0;
-    private LocationListener locationListener;
+    LocationManager locationManager;
     //based on user role
     private Intent intent;
     private String uRole = "Users";
@@ -177,11 +178,12 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void getLocation(){
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(SignInActivity.this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
-            locationListener = new LocationListener() {
+            LocationListener locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
                     if (flag == 2)
@@ -206,6 +208,17 @@ public class SignInActivity extends AppCompatActivity {
 
                 }
             };
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else {
+            ActivityCompat.requestPermissions(SignInActivity.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        getLocation();
     }
 }
