@@ -52,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
             GlobalClass.user.setEmail(user.getEmail());
             GlobalClass.user.setMobileNo(user.getPhoneNumber());
             GlobalClass.user.setName(user.getDisplayName());
-            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+            Intent intent = new Intent(getApplicationContext(), RequestActivity.class);
             startActivity(intent);
         }
 
@@ -138,7 +138,7 @@ public class SignInActivity extends AppCompatActivity {
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             storeUserInfo(user);
-                            Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), RequestActivity.class);
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.

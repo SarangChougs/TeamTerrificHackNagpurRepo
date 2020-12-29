@@ -38,6 +38,7 @@ public class RequestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_request);
 
         requestBtn = findViewById(R.id.request);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
