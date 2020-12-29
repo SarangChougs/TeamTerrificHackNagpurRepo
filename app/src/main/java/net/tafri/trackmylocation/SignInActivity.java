@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,8 +22,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-
-import javax.microedition.khronos.opengles.GL;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import static com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN;
 
@@ -134,15 +137,15 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-
-                            updateUI(user);
+                            storeUserInfo(user);
                             Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                             startActivity(intent);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Sign in Failed, Please Try again", Toast.LENGTH_SHORT).show();
                             //Snackbar.make(mBinding.mainLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            updateUI(null);
+                            //storeUserInfo(null);
                         }
 
                         // ...
@@ -150,6 +153,33 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
+    private void storeUserInfo(final FirebaseUser user) {
+        GlobalClass.user.setUid(user.getUid());
+        GlobalClass.user.setEmail(user.getEmail());
+        GlobalClass.user.setMobileNo(user.getPhoneNumber());
+        GlobalClass.user.setName(user.getDisplayName());
+        FirebaseDatabase.getInstance().getReference("Users/" + user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("uid").getValue() == null){
+                    FirebaseDatabase.getInstance().getReference("Users/" + user.getUid()).setValue(GlobalClass.user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(SignInActivity.this, "Sign in complete", Toast.LENGTH_SHORT).show();
+                                System.out.println("Data Inserted");
+                            } else{
+                                System.out.println("Data Insertion failed");
+                            }
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

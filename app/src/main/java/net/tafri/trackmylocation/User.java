@@ -12,6 +12,10 @@ public class User {
         MobileNo = mobileNo;
     }
 
+    public User(){
+        //empty constructor
+    }
+
     public String getName() {
         return Name;
     }
