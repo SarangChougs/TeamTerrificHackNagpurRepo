@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/google_icon" />
+            android:src="@drawable/app_icon" />
 
 
         <TextView
@@ -29,7 +29,8 @@
             android:includeFontPadding="false"
             android:paddingTop="20sp"
             android:shadowColor="#0E0E0E"
-            android:text="Sign In"
+            android:text="AMBULANCE"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="45sp" />
@@ -38,7 +39,8 @@
             android:layout_height="wrap_content"
             android:includeFontPadding="false"
             android:shadowColor="#0E0E0E"
-            android:text="Sign-In with Google"
+            android:text="on one click"
+            android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="14sp" />
@@ -56,6 +58,7 @@
             android:background="@drawable/round_btn"
             android:drawableLeft="@drawable/ic_gmail"
             android:elevation="8dp"
+            android:padding="16dp"
             android:text="Sign In with Google"
             android:textColor="#fff" />
 
