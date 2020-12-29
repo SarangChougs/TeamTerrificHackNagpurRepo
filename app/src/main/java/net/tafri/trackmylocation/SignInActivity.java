@@ -46,6 +46,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_in);
+        //intent based on user role
         intent = new Intent(getApplicationContext(), ManageRequests.class);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -56,6 +57,7 @@ public class SignInActivity extends AppCompatActivity {
             GlobalClass.user.setMobileNo(user.getPhoneNumber());
             GlobalClass.user.setName(user.getDisplayName());
             startActivity(intent);
+            finish();
         }
         createRequest();
         findViewById(R.id.google_signIn).setOnClickListener(new View.OnClickListener() {
@@ -112,6 +114,7 @@ public class SignInActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             storeUserInfo(user);
                             startActivity(intent);
+                            finish();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());

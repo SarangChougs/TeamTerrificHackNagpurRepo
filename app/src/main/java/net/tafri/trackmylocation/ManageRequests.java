@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ManageRequests extends AppCompatActivity {
@@ -120,6 +123,18 @@ public class ManageRequests extends AppCompatActivity {
 
     public void acceptRequest(int position) {
         //method to accept the request
-        Toast.makeText(this, "request accepted for position " + position, Toast.LENGTH_SHORT).show();
+        Request request = mRequests.get(position);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("driveName", GlobalClass.user.getName());
+        map.put("driverId", GlobalClass.user.getUid());
+        map.put("driverMobileNo", GlobalClass.user.getMobileNo());
+
+        GlobalClass.RequestedUserId = request.getUserId();
+
+        FirebaseDatabase.getInstance().getReference("Requests/" + request.getUserId() + "/status").setValue("Accepted");
+        FirebaseDatabase.getInstance().getReference("Requests/" + request.getUserId() + "/driverInfo").setValue(map);
+        //Open Maps Activity
+        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        finish();
     }
 }

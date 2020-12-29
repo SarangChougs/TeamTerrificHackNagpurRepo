@@ -42,8 +42,10 @@ public class RequestActivity extends AppCompatActivity {
         requestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                requestBtn.setText("Requesting...");
-                setRequest();
+                if (requestBtn.getText().toString().equals("Request")) {
+                    requestBtn.setText("Requesting...");
+                    setRequest();
+                }
             }
         });
     }
@@ -52,9 +54,6 @@ public class RequestActivity extends AppCompatActivity {
         Request request = new Request("" + GlobalClass.user.getName(),
                 "" + GlobalClass.user.getUid(),
                 "" + GlobalClass.user.getMobileNo(),
-                "",
-                "",
-                "",
                 "Requested");
         FirebaseDatabase.getInstance().getReference("Requests/" + GlobalClass.user.getUid()).setValue(request).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
