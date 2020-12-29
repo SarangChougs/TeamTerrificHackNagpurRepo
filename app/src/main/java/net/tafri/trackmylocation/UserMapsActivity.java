@@ -4,11 +4,8 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,15 +19,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -40,10 +34,8 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
 
     private GoogleMap mMap;
     LocationManager locationManager;
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
     Marker driverMarker, userMarker;
     String requestId;
-    int flag = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,19 +162,5 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
         mMap = googleMap;
         setDriverCoordinates();
         setUserCoordinates();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    public void setDelay(int delay) {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                flag = 1;
-            }
-        }, delay);
     }
 }

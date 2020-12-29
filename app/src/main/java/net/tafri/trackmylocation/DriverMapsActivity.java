@@ -186,12 +186,6 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
         setUserCoordinates();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        locationManager.removeUpdates(locationListener);
-    }
-
     public void setDelay(int delay) {
         new Handler().postDelayed(new Runnable() {
             @Override
