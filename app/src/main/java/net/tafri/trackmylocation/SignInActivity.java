@@ -38,8 +38,10 @@ public class SignInActivity extends AppCompatActivity {
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
     private Object mBinding;
+
+    //based on user role
     private Intent intent;
-    private String uRole = "Drivers";
+    private String uRole = "Users";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class SignInActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_sign_in);
         //intent based on user role
-        intent = new Intent(getApplicationContext(), ManageRequests.class);
+        intent = new Intent(getApplicationContext(), RequestActivity.class);
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {

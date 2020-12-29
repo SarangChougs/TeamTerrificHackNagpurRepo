@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
@@ -144,9 +145,10 @@ public class RequestActivity extends AppCompatActivity {
                 if (snapshot.getValue() != null) {
                     String status;
                     status = snapshot.getValue().toString();
+                    Toast.makeText(RequestActivity.this, "" + status, Toast.LENGTH_SHORT).show();
                     if (status.equals("Accepted")) {
                         GlobalClass.RequestedUserId = GlobalClass.user.getUid();
-                        startActivity(new Intent(getApplicationContext(), DriverMapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), UserMapsActivity.class));
                     }
                 }
             }

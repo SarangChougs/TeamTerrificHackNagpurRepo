@@ -163,8 +163,6 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 }
             }
 

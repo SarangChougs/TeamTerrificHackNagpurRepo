@@ -42,7 +42,6 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
     LocationManager locationManager;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     Marker driverMarker, userMarker;
-    LocationListener locationListener;
     String requestId;
     int flag = 1;
 
@@ -56,7 +55,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        setDriverCoordinates();
+        setUserCoordinates();
     }
 
     public void setDriverCoordinates() {
@@ -94,8 +93,6 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 }
             }
 
@@ -141,8 +138,6 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
                 } else {
                     ActivityCompat.requestPermissions(UserMapsActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -165,13 +160,12 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        setUserCoordinates();
+        setDriverCoordinates();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        locationManager.removeUpdates(locationListener);
     }
 
     public void setDelay(int delay) {
