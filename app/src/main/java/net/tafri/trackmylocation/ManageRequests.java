@@ -57,6 +57,7 @@ public class ManageRequests extends AppCompatActivity {
                     flag = false;
                     Request request = new Request();
                     request.setUsername(requestSnapshot.child("username").getValue().toString());
+                    request.setUserId(requestSnapshot.child("userId").getValue().toString());
                     request.setUserMobile(requestSnapshot.child("userMobile").getValue().toString());
                     mRequests.add(request);
                 }

@@ -119,6 +119,7 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
 
                 }
             };
+            setUserCoordinates();
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         } else {
@@ -152,6 +153,7 @@ public class DriverMapsActivity extends FragmentActivity implements OnMapReadyCa
                         result += addresses.get(0).getCountryName();
                         LatLng latLng = new LatLng(latitude, longitude);
                         if (userMarker != null) {
+                            userMarker.remove();
                             userMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(result));
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));

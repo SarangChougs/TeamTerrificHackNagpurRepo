@@ -149,6 +149,7 @@ public class RequestActivity extends AppCompatActivity {
                     if (status.equals("Accepted")) {
                         GlobalClass.RequestedUserId = GlobalClass.user.getUid();
                         startActivity(new Intent(getApplicationContext(), UserMapsActivity.class));
+                        finish();
                     }
                 }
             }

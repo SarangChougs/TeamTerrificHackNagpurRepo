@@ -82,6 +82,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                         result += addresses.get(0).getCountryName();
                         LatLng latLng = new LatLng(latitude, longitude);
                         if (driverMarker != null) {
+                            driverMarker.remove();
                             driverMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(result));
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
@@ -93,6 +94,10 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                } else {
+                    ActivityCompat.requestPermissions(UserMapsActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                            1);
                 }
             }
 
@@ -127,6 +132,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                         result += addresses.get(0).getCountryName();
                         LatLng latLng = new LatLng(latitude, longitude);
                         if (userMarker != null) {
+                            userMarker.remove();
                             userMarker = mMap.addMarker(new MarkerOptions().position(latLng).title(result));
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
@@ -141,7 +147,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                 } else {
                     ActivityCompat.requestPermissions(UserMapsActivity.this,
                             new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                            REQUEST_LOCATION_PERMISSION);
+                            2);
                 }
             }
 
@@ -155,12 +161,15 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         setUserCoordinates();
+        if(requestCode == 1)
+            setDriverCoordinates();
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         setDriverCoordinates();
+        setUserCoordinates();
     }
 
     @Override
