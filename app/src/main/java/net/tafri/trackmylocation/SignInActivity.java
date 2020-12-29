@@ -22,6 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import javax.microedition.khronos.opengles.GL;
+
 import static com.google.android.gms.auth.api.signin.GoogleSignInOptions.DEFAULT_SIGN_IN;
 
 
@@ -42,6 +44,11 @@ public class SignInActivity extends AppCompatActivity {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if(user!=null){
+            //Global Class User object to store user info throughout
+            GlobalClass.user.setUid(user.getUid());
+            GlobalClass.user.setEmail(user.getEmail());
+            GlobalClass.user.setMobileNo(user.getPhoneNumber());
+            GlobalClass.user.setName(user.getDisplayName());
             Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
             startActivity(intent);
         }
@@ -127,6 +134,7 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             updateUI(user);
                             Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
                             startActivity(intent);
