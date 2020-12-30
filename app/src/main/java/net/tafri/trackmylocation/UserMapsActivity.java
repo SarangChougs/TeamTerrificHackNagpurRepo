@@ -6,6 +6,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_driver_maps);
+        setContentView(R.layout.activity_user_maps);
         requestId = GlobalClass.RequestedUserId;
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -133,6 +134,7 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
                             mMap.setMaxZoomPreference(20);
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21.0f));
                         }
+                        setDriverName();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -162,5 +164,22 @@ public class UserMapsActivity extends FragmentActivity implements OnMapReadyCall
         mMap = googleMap;
         setDriverCoordinates();
         setUserCoordinates();
+    }
+
+    public void setDriverName(){
+        FirebaseDatabase.getInstance().getReference("Requests/" + requestId + "/driverInfo").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.child("driverName").getValue() == null)
+                    return;
+                TextView textView = findViewById(R.id.driver_name);
+                textView.setText(snapshot.child("driverName").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }

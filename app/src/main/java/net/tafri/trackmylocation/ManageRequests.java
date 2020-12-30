@@ -105,7 +105,7 @@ public class ManageRequests extends AppCompatActivity {
 
             Request request = list.get(position);
             holder.Name.setText(request.getUsername());
-            holder.UserDetails.setText(request.getUserMobile());
+            holder.UserDetails.setText("");
             holder.AcceptBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +137,7 @@ public class ManageRequests extends AppCompatActivity {
         //method to accept the request
         Request request = mRequests.get(position);
         HashMap<String, String> map = new HashMap<>();
-        map.put("driveName", GlobalClass.user.getName());
+        map.put("driverName", GlobalClass.user.getName());
         map.put("driverId", GlobalClass.user.getUid());
         map.put("driverMobileNo", GlobalClass.user.getMobileNo());
 
