@@ -2,11 +2,17 @@ package net.tafri.trackmylocation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +35,8 @@ public class ManageRequests extends AppCompatActivity {
     RecyclerView mRecyclerView;
     RequestAdapter mAdapter;
     List<Request> mRequests;
+    LocationManager locationManager;
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,7 @@ public class ManageRequests extends AppCompatActivity {
         mRequests = new ArrayList<>();
         mAdapter = new RequestAdapter(this, mRequests);
         mRecyclerView.setAdapter(mAdapter);
-        getRequests();
+        getLocation();
     }
 
     public void getRequests() {
@@ -173,5 +181,53 @@ public class ManageRequests extends AppCompatActivity {
     //convert degree to radian
     private static double rad2deg(double distance) {
         return (distance * 180.0 / Math.PI);
+    }
+
+    private void getLocation(){
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(ManageRequests.this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    if (flag == 2)
+                        return;
+                    flag++;
+                    GlobalClass.currentUserLatitude = location.getLatitude();
+                    GlobalClass.currentUserLongitude = location.getLongitude();
+                    if(flag == 1)
+                        getRequests();
+                    Toast.makeText(ManageRequests.this, "Location Updated", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        } else {
+            ActivityCompat.requestPermissions(ManageRequests.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    1);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        getLocation();
     }
 }
