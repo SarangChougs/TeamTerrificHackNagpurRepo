@@ -1,5 +1,5 @@
 # TeamTerrificHackNagpurRepo
-This is our team's private repo for HackNagpur
+This is our team's repo for HackNagpur
 
 ## Team Members
 1. Achal Urankar
