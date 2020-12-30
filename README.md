@@ -15,7 +15,7 @@ Our Idea is simple, we wanted to solve the problem of not getting ambulance on t
 So we came up with the idea of creating a geolocation based mobile app, like uber, which can fetch you
 the nearest available ambulance on click of a button.
 
-## Teck Stack
+## Tech Stack
 1. Java from android
 2. Firebase for backend
 3. Google Maps API for maps
