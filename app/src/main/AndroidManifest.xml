@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="net.tafri.trackmylocation">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -15,7 +16,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ProfileActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -28,6 +28,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+
         <activity
             android:name=".SignInActivity">
             <intent-filter>
@@ -36,7 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapsActivity">
+        <activity android:name=".MapsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:value="net.tafri.trackmylocation.MapsActivity" >
 
         </activity>
     </application>
