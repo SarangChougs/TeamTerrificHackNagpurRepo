@@ -29,7 +29,7 @@
             android:includeFontPadding="false"
             android:paddingTop="20sp"
             android:shadowColor="#0E0E0E"
-            android:text="AMBULANCE"
+            android:text="TURBO"
             android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="#000000"
